@@ -93,39 +93,14 @@ void loop()
   distanceCm = duration / 29.1 / 2 ;
   distanceIn = duration / 74 / 2;
 
-  Serial.println("ok");
- 
-  if (distanceCm <= 0)
-  {
-    //Serial.print("-1");
-    //mySerial.print("-1");
-  }
-  else 
-  {
-    //Serial.print(distanceCm);
-    //mySerial.print(distanceCm);
-  }   
-  delay(250);
+  delay(200);
 
   // Read Temperature
   int tempRead = analogRead(pinTemp);
   float voltage = tempRead * (5000 / 1024.0);
   float temperature = voltage / 10;
 
-  Serial.println("ok2");
-
-  if (temperature <= 0)
-  {
-    //Serial.println(",-1");
-    //mySerial.println(",-1");
-  }
-  else 
-  {
-    //Serial.print("," + String(temperature));
-    //Serial.println();
-    //mySerial.print("," + String(temperature));
-    //mySerial.println();
-  }
+  delay(200);
 
   // Buzzer & Led
   if (distanceCm <= 5)
@@ -158,7 +133,6 @@ void loop()
         mySerial.write(26);
         delay(500);
         statFlag = true;
-        Serial.println("eh1");
       }
     }
     else
@@ -195,7 +169,6 @@ void loop()
         mySerial.write(26);
         delay(500);
         statFlag = true;
-        Serial.println("eh2");
       }
     }
     else
@@ -209,15 +182,13 @@ void loop()
     digitalWrite(pinBuzzer, LOW);
   }
 
-  Serial.println("ok3");
-
   // Display
   lcd.clear();
   lcd.setCursor(0, 0);        
   lcd.print("Water: " + String(distanceCm) + " cm"); 
   lcd.setCursor(0, 1);        
   lcd.print("Temp : " + String(temperature) + " c");        
-  delay(250);
+  delay(200);
 }
 
 
