@@ -53,7 +53,7 @@ void setup()
   pinMode(ECHO_PIN, INPUT);
 
   // init lcd
-  lcd.begin(); //initialize the lcd
+  lcd.init(); //initialize the lcd
   lcd.backlight(); //open the backlight 
 
   // init buzzer
@@ -65,10 +65,7 @@ void setup()
   pinMode(pinLedGreen, OUTPUT);
 
   // init sim
-  mySerial.println("AT");
-  delay(500);
-  mySerial.println("AT+CMGF=1");
-  delay(500);
+  
 
   lcd.clear();
   lcd.setCursor(0, 0);        
@@ -95,6 +92,8 @@ void loop()
   duration = pulseIn(ECHO_PIN,HIGH);
   distanceCm = duration / 29.1 / 2 ;
   distanceIn = duration / 74 / 2;
+
+  Serial.println("ok");
  
   if (distanceCm <= 0)
   {
@@ -112,6 +111,8 @@ void loop()
   int tempRead = analogRead(pinTemp);
   float voltage = tempRead * (5000 / 1024.0);
   float temperature = voltage / 10;
+
+  Serial.println("ok2");
 
   if (temperature <= 0)
   {
@@ -142,13 +143,22 @@ void loop()
   
       if (statFlag)
       {
-        mySerial.println("AT+CMGS=\"+639060973804\"");
+        mySerial.print("AT\r");
+        updateSerial();
         delay(500);
-        mySerial.print("Red Alert! Water level is increase by " + waterPercent + "% at your place. Current Temperature is " + temperature + "C.");
+        mySerial.print("AT+CMGF=1\r");
+        updateSerial();
+        delay(500);
+        mySerial.print("AT+CMGS=\"09166159067\"\r");
+        updateSerial();
+        delay(500);
+        mySerial.print("Red Alert! Water level is increase by " + String(waterPercent) + "% at your place. Current Temperature is " + String(temperature) + "C.");
+        updateSerial();
         delay(500);
         mySerial.write(26);
         delay(500);
         statFlag = true;
+        Serial.println("eh1");
       }
     }
     else
@@ -170,13 +180,22 @@ void loop()
 
       if (statFlag)
       {
-        mySerial.println("AT+CMGS=\"+639060973804\"");
+        mySerial.print("AT\r");
+        updateSerial();
         delay(500);
-        mySerial.print("Orange Alert! Water level is increase by " + waterPercent + "% at your place. Current Temperature is " + temperature + "C.");
+        mySerial.print("AT+CMGF=1\r");
+        updateSerial();
+        delay(500);
+        mySerial.print("AT+CMGS=\"09166159067\"\r");
+        updateSerial();
+        delay(500);
+        mySerial.print("Orange Alert! Water level is increase by " + String(waterPercent) + "% at your place. Current Temperature is " + String(temperature) + "C.");
+        updateSerial();
         delay(500);
         mySerial.write(26);
         delay(500);
         statFlag = true;
+        Serial.println("eh2");
       }
     }
     else
@@ -190,6 +209,8 @@ void loop()
     digitalWrite(pinBuzzer, LOW);
   }
 
+  Serial.println("ok3");
+
   // Display
   lcd.clear();
   lcd.setCursor(0, 0);        
@@ -197,4 +218,16 @@ void loop()
   lcd.setCursor(0, 1);        
   lcd.print("Temp : " + String(temperature) + " c");        
   delay(250);
+}
+
+
+void updateSerial() {
+  delay(500);
+  while (Serial.available()) {
+    mySerial.write(Serial.read());//Forward what Serial received to Software Serial Port
+  }
+
+  while (mySerial.available()) {
+    Serial.write(mySerial.read());//Forward what Software Serial received to Serial Port
+  }
 }
