@@ -106,16 +106,12 @@ void loop()
       if (statFlag)
       {
         Serial.print("AT\r");
-        updateSerial();
         delay(200);
         Serial.print("AT+CMGF=1\r");
-        updateSerial();
         delay(200);
         Serial.print("AT+CMGS=\"09166159067\"\r");
-        updateSerial();
         delay(200);
         Serial.print("Red Alert! Water level is increase by " + String(waterPercent) + "% at your place. Current Temperature is " + String(temperature) + "C.");
-        updateSerial();
         delay(200);
         Serial.write(26);
         delay(2000);
@@ -146,13 +142,10 @@ void loop()
         delay(200);
 
         Serial.print("AT+CMGF=1\r");
-        updateSerial();
         delay(200);
         Serial.print("AT+CMGS=\"09166159067\"\r");
-        updateSerial();
         delay(200);
         Serial.print("Orange Alert! Water level is increase by " + String(waterPercent) + "% at your place. Current Temperature is " + String(temperature) + "C.");
-        updateSerial();
         delay(200);
         Serial.write(26);
         delay(2000);
@@ -177,18 +170,4 @@ void loop()
   lcd.setCursor(0, 1);        
   lcd.print("Temp : " + String(temperature) + " c");        
   delay(200);
-}
-
-
-void updateSerial() {
-  //delay(200);
-  /*
-  while (Serial.available()) {
-    mySerial.write(Serial.read());//Forward what Serial received to Software Serial Port
-  }
-
-  while (mySerial.available()) {
-    Serial.write(mySerial.read());//Forward what Software Serial received to Serial Port
-  }
-  */
 }
